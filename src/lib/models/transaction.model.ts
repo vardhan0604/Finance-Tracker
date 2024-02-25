@@ -13,7 +13,8 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface ITransaction extends Document {
-    userId: Schema.Types.ObjectId;
+    // userId: Schema.Types.ObjectId;
+    email: string;
     accountId: Schema.Types.ObjectId;
     amount: number;
     category: string;
@@ -25,7 +26,8 @@ interface ITransaction extends Document {
 }
 
 const transactionSchema = new mongoose.Schema({
-    userId: { type: mongoose.Types.ObjectId, ref: 'User'},
+    // userId: { type: mongoose.Types.ObjectId, ref: 'User'},
+    email: { type: String, ref: 'User'},
     accountId: { type: mongoose.Types.ObjectId,  ref: 'Account'},
     amount: {type: Number, required: true},
     category: { type: String, required: true},

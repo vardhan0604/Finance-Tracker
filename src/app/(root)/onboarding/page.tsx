@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { getSession } from "@/app/utils/auth";
 import { addUser } from "@/lib/actions/users.action";
-import { redirect } from "next/navigation";
 import { useRouter } from 'next/navigation';
 
 

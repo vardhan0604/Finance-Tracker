@@ -9,15 +9,18 @@
 
 
 import mongoose, { Schema, Document } from 'mongoose'
-interface IAccount extends Document {
-    userId: Schema.Types.ObjectId;
+import User from './users.model';
+export interface IAccount extends Document {
+    // accountId: Schema.Types.ObjectId;
+    email: string;
     name: string;
     balance: number;
     createdAt: Date;
     updatedAt: Date;
 }
 const accountSchema = new mongoose.Schema({
-    userId: { type: mongoose.Types.ObjectId, required: true},
+    //  accountId: { type: mongoose.Types.ObjectId, required: true},/
+    email: { type: String,ref:User, required: true},
     name: { type: String, required: true},
     balance: {type: Number, required: true},
     createdAt:{ type: Date, default: Date.now },
