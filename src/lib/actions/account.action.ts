@@ -17,3 +17,12 @@ export const createAccount = async (email: string, name: string, balance: number
         throw new Error(`Failed to add user: ${error.message}`)
     }
 };
+
+export const getAllAccounts= async()=>{
+    try{
+        const accounts = await Account.find();
+        return accounts;
+    }catch(error:any){
+        throw new Error(`Failed to update user : ${error.message}`)
+    }
+}

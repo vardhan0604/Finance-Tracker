@@ -1,5 +1,6 @@
 import { auth, signIn, signOut } from "@/auth";
 import AccountForm from "@/components/accountForm";
+import { getAllAccounts } from "@/lib/actions/account.action";
 import { checkUser } from "@/lib/actions/users.action";
 import { redirect } from "next/navigation";
 
@@ -25,6 +26,9 @@ export default async function Page() {
   if (!user) redirect("/signIn")
   let check = await checkUser(user);
   if (!check) redirect("/onboarding")
+
+  let accounts= await getAllAccounts();
+  console.log(accounts)
 
   return (
     <section>

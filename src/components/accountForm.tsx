@@ -10,7 +10,6 @@ export default function AccountForm({ user }: Props) {
     const [amount, setAmount] = useState(""); 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        
         try {
             const account = await createAccount(user, accountName, parseFloat(amount));
             console.log("Account created:", account);
