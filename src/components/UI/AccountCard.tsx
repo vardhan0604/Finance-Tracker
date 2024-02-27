@@ -1,17 +1,25 @@
+import { deleteAccount, getAllAccounts, updateAccount } from '@/lib/actions/account.action';
 import { IAccount } from '@/lib/models/account.model';
 import React from 'react'
 
 type Props = {
         key:string
         account: IAccount
+        setAccounts: React.Dispatch<React.SetStateAction<IAccount[]>>;
 }
 
 const AccountCard = (props: Props) => {
-    const { account } = props;
+    const { account,setAccounts } = props;
 
-    const handleClick=()=>{
+    const handleClick=async()=>{
+        // const res= await updateAccount(account._id,"changed",1000000)
+        const res= await deleteAccount(account._id)
         // console.log(key)
-        console.log(account._id)
+        // console.log(res)
+
+        const updated=await getAllAccounts();
+        setAccounts(updated)
+        // console.log(account._id)
     }
 
     return (

@@ -38,7 +38,7 @@ export default function AccountForm({ user }: Props) {
         <div>
         
         <div>
-            <AccountCards accounts={accounts}/>
+            <AccountCards accounts={accounts} setAccounts={setAccounts}/>
         </div>
           
        <div>

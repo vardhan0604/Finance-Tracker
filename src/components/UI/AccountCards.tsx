@@ -4,14 +4,15 @@ import AccountCard from "./AccountCard";
 
 interface AccountCardsProps {
     accounts: IAccount[];
+    setAccounts: React.Dispatch<React.SetStateAction<IAccount[]>>;
 }
 
-const AccountCards = ({ accounts }: AccountCardsProps) => {
+const AccountCards = ({ accounts ,setAccounts }: AccountCardsProps) => {
     
     return (
         <div className="flex gap-7">
             {accounts.map((account: IAccount) => (
-                <AccountCard key={account._id.toString()} account={account} />
+                <AccountCard key={account._id.toString()} account={account} setAccounts={setAccounts}/>
             ))}
         </div>
     );

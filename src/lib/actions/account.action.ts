@@ -27,14 +27,13 @@ export const getAllAccounts= async()=>{
     }
 }
 
-export const updateAccount = async (accountId: string, email: string, name: string, balance: number) => {
+export const updateAccount = async (accountId: string, name: string, balance: number) => {
     try {
         const account = await Account.findById(accountId);
         if (!account) {
             throw new Error("Account not found");
         }
 
-        account.email = email;
         account.name = name;
         account.balance = balance;
 
@@ -45,3 +44,16 @@ export const updateAccount = async (accountId: string, email: string, name: stri
         throw new Error(`Failed to update account: ${error.message}`);
     }
 };
+
+export const deleteAccount = async(accountId: string)=>{
+    try{
+        const account = await Account.findById(accountId);
+        if (!account) {
+            throw new Error("Account not found");
+        }
+        await Account.deleteOne({ _id: accountId });
+        // console.log("Account deleted");
+    }catch(error:any){
+        throw new Error(`Failed to update account: ${error.message}`);
+    }
+}
