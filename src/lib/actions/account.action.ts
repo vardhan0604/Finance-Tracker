@@ -26,3 +26,22 @@ export const getAllAccounts= async()=>{
         throw new Error(`Failed to update user : ${error.message}`)
     }
 }
+
+export const updateAccount = async (accountId: string, email: string, name: string, balance: number) => {
+    try {
+        const account = await Account.findById(accountId);
+        if (!account) {
+            throw new Error("Account not found");
+        }
+
+        account.email = email;
+        account.name = name;
+        account.balance = balance;
+
+        const updatedAccount = await account.save();
+        console.log(updatedAccount);
+        return updatedAccount;
+    } catch (error: any) {
+        throw new Error(`Failed to update account: ${error.message}`);
+    }
+};

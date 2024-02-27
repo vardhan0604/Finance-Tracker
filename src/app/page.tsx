@@ -1,4 +1,6 @@
 import { auth, signIn, signOut } from "@/auth";
+import AccountCard from "@/components/UI/AccountCard";
+import AccountCards from "@/components/UI/AccountCards";
 import AccountForm from "@/components/accountForm";
 import { getAllAccounts } from "@/lib/actions/account.action";
 import { checkUser } from "@/lib/actions/users.action";
@@ -27,7 +29,7 @@ export default async function Page() {
   let check = await checkUser(user);
   if (!check) redirect("/onboarding")
 
-  let accounts= await getAllAccounts();
+  let accounts = await getAllAccounts();
   console.log(accounts)
 
   return (
@@ -36,7 +38,9 @@ export default async function Page() {
         <h1 className="text-xl font-bold	">Welcome to the Finance Tracker</h1>
         <div>{user && <SignOut>{user}</SignOut>}</div>
       </div>
-
+      {/* <div >
+        <AccountCards />
+      </div> */}
       <AccountForm user={user} />
     </section>
   );
