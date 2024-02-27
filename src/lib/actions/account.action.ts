@@ -9,7 +9,6 @@ export const createAccount = async (email: string, name: string, balance: number
             name,
             balance,
         });
-        // await newAccount.save();
         const createdAccount = await newAccount.save();
         console.log(createdAccount)
         return createdAccount;

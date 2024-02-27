@@ -12,7 +12,7 @@
 
 import mongoose, { Schema, Document } from 'mongoose';
 
-interface ITransaction extends Document {
+export interface ITransaction extends Document {
     // userId: Schema.Types.ObjectId;
     email: string;
     accountId: Schema.Types.ObjectId;
