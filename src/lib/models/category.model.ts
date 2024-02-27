@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import User from './users.model';
 
-interface ICategory extends Document {
+export interface ICategory extends Document {
   name: string;
   email: string;
 }
