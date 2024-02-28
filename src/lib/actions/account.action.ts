@@ -26,15 +26,20 @@ export const getAllAccounts= async()=>{
     }
 }
 
-export const updateAccount = async (accountId: string, name: string, balance: number) => {
+export const updateAccount = async (accountId: string, name?: string, balance?: number) => {
     try {
         const account = await Account.findById(accountId);
         if (!account) {
             throw new Error("Account not found");
         }
 
-        account.name = name;
-        account.balance = balance;
+        if (name) {
+            account.name = name;
+        }
+
+        if (balance) {
+            account.balance = balance;
+        }
 
         const updatedAccount = await account.save();
         console.log(updatedAccount);
@@ -54,5 +59,19 @@ export const deleteAccount = async(accountId: string)=>{
         // console.log("Account deleted");
     }catch(error:any){
         throw new Error(`Failed to update account: ${error.message}`);
+    }
+}
+
+export const deductAmount = async (accountId: string, deductAmount: number) => {
+    try {
+        const account = await Account.findById(accountId);
+        if (!account) {
+            throw new Error("Account not found");
+        }
+        account.balance -= deductAmount
+
+        await account.save();
+    } catch (error: any) {
+        throw new Error(`Failed to add user: ${error.message}`);
     }
 }

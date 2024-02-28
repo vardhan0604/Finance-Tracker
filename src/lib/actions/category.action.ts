@@ -23,3 +23,4 @@ export const getCategories =async(email:string)=>{
         throw new Error(`Failed to add user: ${error.message}`);
     }
 }
+

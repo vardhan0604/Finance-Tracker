@@ -1,4 +1,4 @@
-import { deleteAccount, getAllAccounts, updateAccount } from '@/lib/actions/account.action';
+import { deductAmount, deleteAccount, getAllAccounts, updateAccount } from '@/lib/actions/account.action';
 import { IAccount } from '@/lib/models/account.model';
 import React from 'react'
 
@@ -12,8 +12,9 @@ const AccountCard = (props: Props) => {
     const { account,setAccounts } = props;
 
     const handleClick=async()=>{
-        // const res= await updateAccount(account._id,"changed",1000000)
-        const res= await deleteAccount(account._id)
+        // const res= await updateAccount(account._id,undefined,12121221)
+        const res= await deductAmount(account._id,100)
+        // const res= await deleteAccount(account._id)
         // console.log(key)
         // console.log(res)
 
