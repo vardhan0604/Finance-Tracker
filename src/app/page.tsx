@@ -1,47 +1,29 @@
 import { auth, signIn, signOut } from "@/auth";
 import AccountCard from "@/components/UI/AccountCard";
 import AccountCards from "@/components/UI/AccountCards";
+import Navabar from "@/components/UI/Navabar";
 import AccountForm from "@/components/accountForm";
 import { getAllAccounts } from "@/lib/actions/account.action";
 import { checkUser } from "@/lib/actions/users.action";
 import { redirect } from "next/navigation";
 
 
-function SignOut({ children }: { children: React.ReactNode }) {
-  return (
-    <form className="flex gap-4"
-      action={async () => {
-        "use server";
-        await signOut();
-      }}
-    >
-      <p>{children}</p>
-      <button type="submit">Sign out</button>
-    </form>
-  );
-}
-
 export default async function Page() {
   let session = await auth();
-  console.log(session)
   let user = session?.user?.email;
   if (!user) redirect("/signIn")
   let check = await checkUser(user);
   if (!check) redirect("/onboarding")
-
-  let accounts = await getAllAccounts();
-  console.log(accounts)
-
   return (
-    <section>
-      <div className="flex justify-between m-3 align-middle">
-        <h1 className="text-xl font-bold	">Welcome to the Finance Tracker</h1>
-        <div>{user && <SignOut>{user}</SignOut>}</div>
+    <section className="h-lvh">
+      <Navabar user={user} />
+      {/* <AccountForm user={user} /> */}
+      <div className="grid grid-cols-4" style={{height: "calc(100vh - 64px)"}}>
+        <div className="bg-gray-200 col-span-3 h-full">60%</div>
+        <div className="bg-gray-300 col-span-1">40%</div>
       </div>
-      {/* <div >
-        <AccountCards />
-      </div> */}
-      <AccountForm user={user} />
+
+
     </section>
   );
 }
