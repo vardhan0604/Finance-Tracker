@@ -1,4 +1,4 @@
-//            **Accounts**:
+//      **Accounts**:
 //     - _id (ObjectId)
 //     - userId (ObjectId) (Reference to Users collection)
 //     - name (String) (e.g., "Main Account", "Savings Account")

@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { createAccount, getAllAccounts } from "@/lib/actions/account.action";
 import { IAccount } from "@/lib/models/account.model";
 import { useEffect, useState } from "react";
-import AccountCards from "./UI/AccountCards";
+import AccountCards from "./ui/AccountCards";
 interface Props {
     user: string;
   }

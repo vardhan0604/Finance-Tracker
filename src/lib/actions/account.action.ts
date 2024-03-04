@@ -40,7 +40,7 @@ export const updateAccount = async (accountId: string, name?: string, balance?: 
         if (balance) {
             account.balance = balance;
         }
-
+            account.updatedAt=Date.now;
         const updatedAccount = await account.save();
         console.log(updatedAccount);
         return updatedAccount;
