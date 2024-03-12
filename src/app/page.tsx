@@ -65,7 +65,7 @@ export default async function Page() {
 
         </div>
         <div className="flex flex-col col-span-1 border-l-2" style={{ height: "inherit" }}>
-          <h1 className="text-2xl font-bold text-center p-2">Your Transactions</h1>
+          <h1 className="text-2xl font-bold text-center p-2 mr-2">Your Transactions</h1>
           <TransactionsTable />
         </div>
       </div>

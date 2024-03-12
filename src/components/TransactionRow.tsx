@@ -1,5 +1,6 @@
 import React from 'react'
 import { TableCell, TableRow } from './ui/table'
+import TransactionEdit from './TransactionEdit';
 
 type Props = {
     Account: string;
@@ -11,10 +12,11 @@ type Props = {
 export const TransactionRow = (props: Props) => {
     return (
         <TableRow>
-            <TableCell className="font-medium">{props.Account}</TableCell>
-            <TableCell>{`₹${props.Amount}`}</TableCell>
-            <TableCell>{props.Category}</TableCell>
-            <TableCell>{props.Type}</TableCell>
+            <TableCell className="font-medium text-left">{props.Account}</TableCell>
+            <TableCell className='text-left'>{`₹${props.Amount}`}</TableCell>
+            <TableCell className='text-left'>{props.Category}</TableCell>
+            <TableCell className='text-left'>{props.Type}</TableCell>
+            <TableCell className='text-left'>{<TransactionEdit/>}</TableCell>
         </TableRow>
     )
 }

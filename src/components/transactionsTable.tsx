@@ -17,13 +17,14 @@ const TransactionsTable = (props: Props) => {
   return (
     <ScrollArea className="h-full">
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your recent transactions</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Account</TableHead>
-          <TableHead>Amount</TableHead>
-          <TableHead>Category</TableHead>
-          <TableHead>Type</TableHead>
+          <TableHead className='text-left'>Account</TableHead>
+          <TableHead className='text-left'>Amount</TableHead>
+          <TableHead className='text-left'>Category</TableHead>
+          <TableHead className='text-left'> Type</TableHead>
+          <TableHead className='text-left'>Type</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

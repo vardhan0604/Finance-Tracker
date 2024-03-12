@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import AccountEdit from './AccountEdit';
 
 type Props = {
     AccountName: string;
@@ -13,7 +14,8 @@ export const Accounts = (props: Props) => {
                 <CardTitle className="text-sm font-medium">
                     {props.AccountName}
                 </CardTitle>
-                <svg
+                <AccountEdit/>
+                {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"
@@ -24,7 +26,7 @@ export const Accounts = (props: Props) => {
                     className="h-4 w-4 text-muted-foreground"
                 >
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                </svg>
+                </svg> */}
             </CardHeader>
             <CardContent>
                 <div className="text-3xl font-bold">{props.AccountAmount}</div>
