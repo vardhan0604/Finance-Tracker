@@ -17,7 +17,7 @@ function SignOut({ children }: { children: React.ReactNode }) {
         <p>{children}</p>
         {/* <button type="submit" className='bg-secondary p-1 rounded-md hover:bg-slate-400  duration-150 '>Sign out</button> */}
 
-        <Button type="submit" variant="destructive">Sign Out</Button>
+        <Button type="submit" variant="default">Sign Out</Button>
 
       </form>
     );
