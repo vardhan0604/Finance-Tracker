@@ -1,3 +1,5 @@
+"use client"
+import { auth } from "@/auth";
 import {
     Dialog,
     DialogContent,
@@ -6,27 +8,57 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-
-import React from 'react'
+import { useEffect, useState } from "react";
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
 
-type Props = {}
+
+
+import { updateAccount, getAllAccounts, deleteAccount } from "@/lib/actions/account.action";
+
+type Props = {
+    id: string;
+    user: string;
+    setAccounts: React.Dispatch<React.SetStateAction<{}>>;
+}
 
 const AccountEdit = (props: Props) => {
-    return (
 
-        <Dialog>
+    const [accountName, setAccountName] = useState("");
+    const [amount, setAmount] = useState("")
+    const [open, setOpen] = useState(false);
+ 
+    const fetchAccounts = async () => {
+        const a = await getAllAccounts(props.user);
+        // console.log(a);
+        props.setAccounts(a);
+    };
+    async function handleDelete(e: React.FormEvent) {
+        e.preventDefault();
+        deleteAccount(props.id,props.user)
+        fetchAccounts();
+        setOpen(false);
+    }
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        try {
+            const account = await updateAccount(props.id, props.user, accountName, Number(amount));
+            setAccountName("");
+            setAmount("");
+            fetchAccounts();
+            setOpen(false);
+
+
+        } catch (error) {
+            setOpen(false);
+            console.error("Failed to create account:", (error as Error).message);
+        }
+    }
+    return (
+        <Dialog open={open} onOpenChange={setOpen} >
             <DialogTrigger>
                 <div className="rounded-md px-3 text-primary underline-offset-4 hover:underline">Edit</div>
             </DialogTrigger>
@@ -43,13 +75,13 @@ const AccountEdit = (props: Props) => {
                                 <div className="flex flex-col gap-4 mt-6">
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="account" >Account Name</Label>
-                                        <Input id="account" type="text" />
+                                        <Input id="account" type="text" onChange={(e) => { setAccountName(e.target.value) }} />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="Amount">Amount</Label>
-                                        <Input id="Amount" type="number" />
+                                        <Input id="Amount" type="number" onChange={(e) => { setAmount(e.target.value) }} />
                                     </div>
-                                    <Button variant="default">Update</Button>
+                                    <Button variant="default" onClick={(e) => { handleSubmit(e) }} >Update</Button>
                                 </div>
                             </DialogDescription>
                         </DialogHeader>
@@ -59,10 +91,10 @@ const AccountEdit = (props: Props) => {
                             <DialogTitle>Are you absolutely sure?</DialogTitle>
                             <DialogDescription>
                                 This action cannot be undone. This will delete your Account
-                               from our servers.
+                                from our servers.
                             </DialogDescription>
 
-                            <Button variant="default">Delete</Button>
+                            <Button variant="default" onClick={(e)=>{handleDelete(e)}}>Delete</Button>
                         </DialogHeader>
                     </TabsContent>
                 </Tabs>

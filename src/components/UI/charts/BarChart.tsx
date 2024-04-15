@@ -55,10 +55,10 @@ const data = [
 
 export function Overview() {
   return (
-    <ResponsiveContainer className="h-full">
+    <ResponsiveContainer height="100%" className="h-full">
       <BarChart data={data}
       margin={{
-        top: 0,
+        top: 3,
         right: 0,
         left: -5,
         bottom: -5,

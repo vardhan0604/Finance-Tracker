@@ -26,7 +26,7 @@ export default function AccountForm({ user }: Props) {
     }
 
     const fetchAccounts = async () => {
-        const accounts = await getAllAccounts();
+        const accounts = await getAllAccounts("DFFDDFFD");
         setAccounts(accounts);
     };
 

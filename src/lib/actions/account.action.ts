@@ -1,9 +1,13 @@
 "use server";
 import Account,{IAccount} from "../models/account.model";
-// import { IAccount } from "../models/account.model";
+import { auth } from "@/auth";
 
 export const createAccount = async (email: string, name: string, balance: number) => {
-    try{
+    try {
+        const account = await Account.findOne({  email: email,name:name });    
+        if (account) {
+            throw new Error("Account already exist found");
+        }
         const newAccount: IAccount = new Account({
             email,
             name,
@@ -12,23 +16,24 @@ export const createAccount = async (email: string, name: string, balance: number
         const createdAccount = await newAccount.save();
         console.log(createdAccount)
         return createdAccount;
-    }catch(error:any){
-        throw new Error(`Failed to add user: ${error.message}`)
-    }
-};
+    }   
+    catch (error: any) {
+        throw new Error(`Failed to get account: ${error.message}`);
+    }   
+}
 
-export const getAllAccounts= async()=>{
-    try{
-        const accounts = await Account.find();
+export const getAllAccounts = async (email: string) => {
+    try {
+        const accounts = await Account.find({ email: email });
         return accounts;
-    }catch(error:any){
-        throw new Error(`Failed to update user : ${error.message}`)
+    } catch (error: any) {
+        throw new Error(`Failed to get accounts : ${error.message}`)
     }
 }
 
-export const updateAccount = async (accountId: string, name?: string, balance?: number) => {
+export const updateAccount = async (accountId: string, email: string, name?: string, balance?: number) => {
     try {
-        const account = await Account.findById(accountId);
+        const account = await Account.findOne({ _id: accountId, email: email });
         if (!account) {
             throw new Error("Account not found");
         }
@@ -40,7 +45,9 @@ export const updateAccount = async (accountId: string, name?: string, balance?: 
         if (balance) {
             account.balance = balance;
         }
-            account.updatedAt=Date.now;
+
+        account.updatedAt = Date.now();
+
         const updatedAccount = await account.save();
         console.log(updatedAccount);
         return updatedAccount;
@@ -49,9 +56,9 @@ export const updateAccount = async (accountId: string, name?: string, balance?: 
     }
 };
 
-export const deleteAccount = async(accountId: string)=>{
+export const deleteAccount = async(accountId: string,email: string)=>{
     try{
-        const account = await Account.findById(accountId);
+        const account = await Account.findOne({ _id: accountId, email: email });
         if (!account) {
             throw new Error("Account not found");
         }
@@ -73,5 +80,12 @@ export const deductAmount = async (accountId: string, deductAmount: number) => {
         await account.save();
     } catch (error: any) {
         throw new Error(`Failed to add user: ${error.message}`);
+    }
+}
+
+export const getUser = async () => {
+    let session = await auth();
+    if(session?.user?.email) {
+        return session?.user?.email;
     }
 }

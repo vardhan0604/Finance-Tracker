@@ -19,6 +19,7 @@ export default function Page() {
             setEmail(session?.user?.email ?? "");
         };
         fetchAuth();
+        
     }, []);
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
