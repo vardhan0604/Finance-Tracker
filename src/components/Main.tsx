@@ -6,7 +6,7 @@ import Accounts from './Accounts'
 import Multigraph from './Multigraph'
 import { LineC } from './ui/charts/LineChart'
 import { Overview } from './ui/charts/BarChart'
-import TransactionTable from './transactionTable'
+import TransactionTable from './TransactionTable'
 import { RecoilRoot } from 'recoil'
 
 type Props = {
