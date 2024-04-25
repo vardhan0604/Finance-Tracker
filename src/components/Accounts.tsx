@@ -14,6 +14,8 @@ import {
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { generatePseudoTransactions } from '@/lib/actions/transations.action';
+import { useRecoilState } from 'recoil';
+import { accountsState, userState } from '@/state/atom';
 
 
 type Props = {
@@ -21,21 +23,25 @@ type Props = {
 }
 
 const Accounts = (props: Props) => {
-    const [accounts, setAccounts] = useState({});
+
+    const [user, setUser] = useRecoilState(userState);
+    setUser(props.user);
+
+    const [accounts, setAccounts] = useRecoilState(accountsState);
     const [accountName, setAccountName] = useState("");
     const [amount, setAmount] = useState("")
     const [open, setOpen] = useState(false);
 
 
     const fetchAccounts = async () => {
-        const a = await getAllAccounts(props.user);
+        const a = await getAllAccounts(user);
         setAccounts(a);
     };
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         try {
-            const account = await createAccount(props.user, accountName, Number(amount));
+            const account = await createAccount(user, accountName, Number(amount));
             setAccountName("");
             setAmount("");
             fetchAccounts();
@@ -50,7 +56,7 @@ const Accounts = (props: Props) => {
 
     useEffect(() => {
         fetchAccounts();
-        console.log(props.user)
+        // console.log(props.user)
 
 //    generatePseudoTransactions(props.user);
 
@@ -67,7 +73,7 @@ const Accounts = (props: Props) => {
                     key={account._id}
                         AccountName={account.name}
                         AccountAmount={account.balance}
-                        user={props.user}
+                        user={user}
                         setAccounts={setAccounts}
                         id={account._id}
                     />

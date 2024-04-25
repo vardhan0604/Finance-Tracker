@@ -12,7 +12,10 @@ import {
 } from './ui/dialog';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
-import { createTransactions } from '@/lib/actions/transations.action';
+import { createTransactions, getAllTransactions } from '@/lib/actions/transations.action';
+import { useRecoilState } from 'recoil';
+import { accountsState, transactionsState, userState } from '@/state/atom';
+import { getAllAccounts } from '@/lib/actions/account.action';
 
 type Props = {
     user: string;
@@ -24,6 +27,10 @@ const TransactionTable = (props: Props) => {
     const [category, setCategory] = useState("")
     const [type, setType] = useState("")
     const [open, setOpen] = useState(false);
+    const [accounts, setAccounts] = useRecoilState(accountsState);
+    const [user, setuser] = useRecoilState(userState);
+    const [transactions, setTransactions] = useRecoilState(transactionsState) 
+
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -35,8 +42,12 @@ const TransactionTable = (props: Props) => {
             setAmount("");
             setCategory("");
             setType("");
-            // fetchAccounts();
+          fetchAccounts();
             setOpen(false);
+            getAllTransactions(props.user).then((t) => {
+                setTransactions(t)
+              }
+              )
 
 
         } catch (error) {
@@ -44,6 +55,11 @@ const TransactionTable = (props: Props) => {
             console.error("Failed to create transaction:", (error as Error).message);
         }
     }
+
+    const fetchAccounts = async () => {
+        const a = await getAllAccounts(user);
+        setAccounts(a);
+    };
 
   return (
     <div className="flex flex-col col-span-1 border-l-2" style={{ height: "inherit" }}>

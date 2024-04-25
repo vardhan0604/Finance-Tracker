@@ -1,3 +1,4 @@
+"use client"
 import {
     Dialog,
     DialogContent,
@@ -16,17 +17,44 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
+import { deleteTransaction, getAllTransactions, updateTransaction } from "@/lib/actions/transations.action"
+import { useRecoilState } from "recoil"
+import { transactionsState, userState } from "@/state/atom"
 
-type Props = {}
+type Props = {
+    id: string;
+}
 
 const TransactionEdit = (props: Props) => {
+    const [transactions, setTransactions] = useRecoilState(transactionsState) 
+    const [user, setUser] = useRecoilState(userState) 
+    const [open, setOpen] = useState(false);
+    const [account, setAccount] = useState("");
+    const [amount, setAmount] = useState(0);
+    const [category, setCategory] = useState("");
+    const [type, setType] = useState("");
+
+    const ondelete = () => {
+        deleteTransaction(props.id);
+        getAllTransactions(user).then((t) => {
+            setTransactions(t)
+          }
+          )
+          setOpen(false);
+
+    }
+
+    const onEdit = () => {
+        console.log(account, amount, category, type);
+        updateTransaction(props.id , {account, amount, category, type});
+    }   
     return (
 
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger>
             <div className="rounded-md px-3 text-primary underline-offset-4 hover:underline">Edit</div>
             </DialogTrigger>
@@ -43,16 +71,16 @@ const TransactionEdit = (props: Props) => {
                                 <div className="flex flex-col gap-4 mt-6">
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="account" >Account</Label>
-                                        <Input id="account" type="text" />
+                                        <Input id="account" type="text" onChange={(e)=>{setAccount(e.target.value)}} />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="Amount">Amount</Label>
-                                        <Input id="Amount" type="number" />
+                                        <Input id="Amount" type="number" onChange={(e)=>{setAmount(Number(e.target.value))}}/>
                                     </div>
                                     <div className="flex gap-6">
                                         <div className="flex flex-col gap-2">
                                             <Label htmlFor="Category">Category</Label>
-                                            <Select>
+                                            <Select  onValueChange={setCategory}>
                                                 <SelectTrigger className="w-[180px]">
                                                     <SelectValue placeholder={"Category"} />
                                                 </SelectTrigger>
@@ -67,7 +95,7 @@ const TransactionEdit = (props: Props) => {
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <Label htmlFor="Type">Type</Label>
-                                            <Select>
+                                            <Select onValueChange={setType}>
                                                 <SelectTrigger className="w-[180px]">
                                                     <SelectValue placeholder={"Expense"} />
                                                 </SelectTrigger>
@@ -80,7 +108,7 @@ const TransactionEdit = (props: Props) => {
                                         </div>
                                     </div>
 
-                                    <Button variant="default">Update</Button>
+                                    <Button variant="default" onClick={()=>{onEdit()}}>Update</Button>
                                 </div>
                             </DialogDescription>
                         </DialogHeader>
@@ -93,7 +121,7 @@ const TransactionEdit = (props: Props) => {
                                from our servers.
                             </DialogDescription>
 
-                            <Button variant="default">Delete</Button>
+                            <Button variant="default" onClick={()=>{ondelete()}}>Delete</Button>
                         </DialogHeader>
                     </TabsContent>
                 </Tabs>

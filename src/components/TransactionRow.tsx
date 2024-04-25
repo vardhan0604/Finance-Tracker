@@ -3,6 +3,7 @@ import { TableCell, TableRow } from './ui/table'
 import TransactionEdit from './TransactionEdit';
 
 type Props = {
+    id: string;
     Account: string;
     Amount: string;
     Category: string;
@@ -16,7 +17,7 @@ export const TransactionRow = (props: Props) => {
             <TableCell className='text-left'>{`₹${props.Amount}`}</TableCell>
             <TableCell className='text-left'>{props.Category}</TableCell>
             <TableCell className='text-left'>{props.Type}</TableCell>
-            <TableCell className='text-left'>{<TransactionEdit/>}</TableCell>
+            <TableCell className='text-left'>{<TransactionEdit id={props.id}/>}</TableCell>
         </TableRow>
     )
 }

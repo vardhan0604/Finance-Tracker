@@ -12,6 +12,8 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import TransactionRow from './TransactionRow'
 import { getAllTransactions } from '@/lib/actions/transations.action'
+import { useRecoilState } from 'recoil'
+import { transactionsState, userState } from '@/state/atom'
 
 
 type Props = {
@@ -21,7 +23,9 @@ type Props = {
 const TransactionsTable = (props: Props) => {
    
   //create state transaction which stores array of transactions and it should have the type of transaction array
-  const [transactions, setTransactions] = useState([]) 
+  const [transactions, setTransactions] = useRecoilState(transactionsState) 
+  const [user, setUser] = useRecoilState(userState) 
+
 
 
 
@@ -30,7 +34,7 @@ const TransactionsTable = (props: Props) => {
   console.log(props.user)
 
   useEffect(() => {
-    getAllTransactions(props.user).then((t) => {
+    getAllTransactions(user).then((t) => {
       setTransactions(t)
     }
     )
@@ -55,6 +59,7 @@ const TransactionsTable = (props: Props) => {
         <TableBody>
           {transactions.map((transaction: any) => (
             <TransactionRow
+              id={transaction._id}
               Account={transaction.accountName}
               Amount={transaction.amount}
               Category={transaction.category}
