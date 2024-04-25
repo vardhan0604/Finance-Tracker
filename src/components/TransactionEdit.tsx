@@ -30,6 +30,7 @@ type Props = {
 }
 
 const TransactionEdit = (props: Props) => {
+    
     const [transactions, setTransactions] = useRecoilState(transactionsState) 
     const [user, setUser] = useRecoilState(userState) 
     const [open, setOpen] = useState(false);
@@ -50,7 +51,7 @@ const TransactionEdit = (props: Props) => {
 
     const onEdit = () => {
         console.log(account, amount, category, type);
-        updateTransaction(props.id , {account, amount, category, type});
+        updateTransaction(props.id , {accountName: account, amount, category, type});
     }   
     return (
 
