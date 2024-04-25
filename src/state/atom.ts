@@ -7,7 +7,7 @@ export const userState=atom({
 
 export const accountsState= atom({
     key:'accounts',
-    default:[]
+    default:[]as string[]
 })
 export const transactionsState= atom({
     key:'transactions',

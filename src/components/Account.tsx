@@ -7,7 +7,7 @@ type Props = {
     AccountAmount: string;
     user:string
     id:string;
-    setAccounts: React.Dispatch<React.SetStateAction<{}>>;
+    setAccounts: any;
 }
 
 export const Account = (props: Props) => {
