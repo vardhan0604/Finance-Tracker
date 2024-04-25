@@ -10,7 +10,7 @@ import Multigraph from "@/components/Multigraph";
 import { Button } from '../components/ui/button';
 import Accounts from "@/components/Accounts";
 import { generatePseudoTransactions } from "@/lib/actions/transations.action";
-import TransactionTable from "@/components/transactionTable";
+import TransactionTable from "@/components/TransactionTable";
 import Main from "@/components/Main";
 import { RecoilRoot } from "recoil";
 
