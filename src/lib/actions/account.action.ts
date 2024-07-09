@@ -15,17 +15,34 @@ export const createAccount = async (email: string, name: string, balance: number
         });
         const createdAccount = await newAccount.save();
         console.log(createdAccount)
-        return createdAccount;
+        const data = JSON.parse(JSON.stringify(createdAccount))
+        return data;
     }   
     catch (error: any) {
         throw new Error(`Failed to get account: ${error.message}`);
     }   
 }
 
+export const getAccounts= async (accountId: string,email: string)=>{
+    try{
+        const account = await Account.findOne({ _id: accountId, email: email });    
+        if (!account) {
+            throw new Error("Account not found");
+        }
+        const data = JSON.parse(JSON.stringify(account))
+        return data;
+    }
+    catch (error: any) {
+        throw new Error(`Failed to get account: ${error.message}`);
+    }
+}
+
+
 export const getAllAccounts = async (email: string) => {
     try {
         const accounts = await Account.find({ email: email });
-        return accounts;
+        const data = JSON.parse(JSON.stringify(accounts))
+        return data;
     } catch (error: any) {
         throw new Error(`Failed to get accounts : ${error.message}`)
     }
@@ -50,7 +67,9 @@ export const updateAccount = async (accountId: string, email: string, name?: str
 
         const updatedAccount = await account.save();
         console.log(updatedAccount);
-        return updatedAccount;
+        const data = JSON.parse(JSON.stringify(updatedAccount))
+
+        return data;
     } catch (error: any) {
         throw new Error(`Failed to update account: ${error.message}`);
     }

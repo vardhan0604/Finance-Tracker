@@ -56,32 +56,17 @@ const Accounts = (props: Props) => {
 
     useEffect(() => {
         fetchAccounts();
-        // console.log(props.user)
-
-//    generatePseudoTransactions(props.user);
-
     }, []);
 
     return (
         <div>
+            <div className='flex justify-between pt-2 pb-2'>
             <div className="pt-3 pb-2 text-xl font-extrabold" >
                 Accounts :
             </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 ">
-                {Object.values(accounts).map((account: any) => (
-                    <Account
-                    key={account._id}
-                        AccountName={account.name}
-                        AccountAmount={account.balance}
-                        user={user}
-                        setAccounts={setAccounts}
-                        id={account._id}
-                    />
-                ))}
 
-
-                <Dialog open={open} onOpenChange={setOpen} >
-                    <DialogTrigger className='w-full'>
+            <Dialog open={open} onOpenChange={setOpen} >
+                    <DialogTrigger className='w-fit'>
                         <div className="h-10 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 w-fit items-center">Add
                         </div>
                     </DialogTrigger>
@@ -104,6 +89,21 @@ const Accounts = (props: Props) => {
                         </DialogHeader>
                     </DialogContent>
                 </Dialog>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 ">
+                {Object.values(accounts).map((account: any) => (
+                    <Account
+                      key={account._id.toString()}
+                        AccountName={account.name}
+                        AccountAmount={account.balance}
+                        user={user}
+                        setAccounts={setAccounts}
+                        id={account._id}
+                    />
+                ))}
+
+
+               
 
             </div>
 

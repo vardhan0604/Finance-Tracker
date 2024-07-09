@@ -15,7 +15,7 @@ export default function Page() {
     useEffect(() => {
         const fetchAuth = async () => {
             const session = await getSession();
-            console.log(session?.user?.email ?? "");
+            // console.log(session?.user?.email ?? "");
             setEmail(session?.user?.email ?? "");
         };
         fetchAuth();
@@ -27,7 +27,7 @@ export default function Page() {
         const user = await addUser({ data: { email: email, password: password } });
 
         if (user) {
-            console.log(user);
+            // console.log(user);
             // redirect("/home")
             router.push("/");
         }
@@ -42,7 +42,7 @@ export default function Page() {
                     type="password"
                     value={password}
                     onChange={(e) => {
-                        console.log(e.target.value);
+                        // console.log(e.target.value);
                         setPassword(e.target.value);
                     }}
                 />

@@ -7,8 +7,9 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { CustomTabs, CustomTabsList, CustomTabsTrigger, CustomTabsContent } from './ui/customTabs'
-import { Overview } from './ui/charts/BarChart'
-import { LineC } from './ui/charts/LineChart'
+import { BarChartGraph } from './ui/charts/BarChart'
+import { LineChartGraph } from './ui/charts/LineChart'
+import { Bar } from "recharts"
 
 
 type Props = {}
@@ -42,9 +43,9 @@ const Multigraph = (props: Props) => {
             </TabsList>
           </div>
         </div>
-        <TabsContent value="account" className="h-full"><Overview />
+        <TabsContent value="account" className="h-full"> <BarChartGraph />
         </TabsContent>
-        <TabsContent value="password" className="h-full"><LineC />
+        <TabsContent value="password" className="h-full"><LineChartGraph />
         </TabsContent>
         {/* <Overview /> */}
       </Tabs>

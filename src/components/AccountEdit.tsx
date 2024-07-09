@@ -17,7 +17,7 @@ import { Button } from "./ui/button"
 
 
 
-import { updateAccount, getAllAccounts, deleteAccount } from "@/lib/actions/account.action";
+import { updateAccount, getAllAccounts, deleteAccount, getAccounts } from "@/lib/actions/account.action";
 
 type Props = {
     id: string;
@@ -31,6 +31,12 @@ const AccountEdit = (props: Props) => {
     const [amount, setAmount] = useState("")
     const [open, setOpen] = useState(false);
  
+    useEffect(() => {
+        getAccounts(props.id, props.user).then((a) => {
+            setAccountName(a.name);
+            setAmount(a.balance.toString());
+        })  
+    }, [])
     const fetchAccounts = async () => {
         const a = await getAllAccounts(props.user);
         // console.log(a);
@@ -75,11 +81,11 @@ const AccountEdit = (props: Props) => {
                                 <div className="flex flex-col gap-4 mt-6">
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="account" >Account Name</Label>
-                                        <Input id="account" type="text" onChange={(e) => { setAccountName(e.target.value) }} />
+                                        <Input id="account" type="text" value={accountName} onChange={(e) => { setAccountName(e.target.value) }} />
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <Label htmlFor="Amount">Amount</Label>
-                                        <Input id="Amount" type="number" onChange={(e) => { setAmount(e.target.value) }} />
+                                        <Input id="Amount" type="number" value={amount} onChange={(e) => { setAmount(e.target.value) }} />
                                     </div>
                                     <Button variant="default" onClick={(e) => { handleSubmit(e) }} >Update</Button>
                                 </div>

@@ -19,8 +19,6 @@ export const createTransactions = async (
   category :    string,
   type : string,
 ) => {
-    // console.log("Inside the createTransactions function");
-    // console.log(email,accountName,amount,category,type);
     try {
     const newTransaction = new Transaction({
       email,
@@ -33,7 +31,6 @@ export const createTransactions = async (
     const createdTransaction = await newTransaction.save();
 
     const updateAmount = type === "Expense" ? -amount : amount;
-    //UPDATE THE ACCOUNT BALANCE
 
     const account = await Account.findOne({ email: email, name: accountName });
     if (!account) {
@@ -57,12 +54,54 @@ export const createTransactions = async (
   }
 };
 
-export const getAllTransactions = async (email: string) => {
+export const getTransaction= async (transactionId: string) => {
   try {
-    const transactions = await Transaction.find({ email: email });
-    return transactions;
+    const transaction = await Transaction.findById(transactionId);
+    if (!transaction) {
+      throw new Error("Transaction not found");
+    }
+    const data = JSON.parse(JSON.stringify(transaction))
+    return data;
   } catch (error: any) {
-    throw new Error(`Failed to update account: ${error.message}`);
+    throw new Error(`Failed to get transaction: ${error.message}`);
+  }
+}
+
+// export const getAllTransactions = async (email: string) => {
+//   try {
+//     const transactions = await Transaction.find({ email: email });
+//     const data = JSON.parse(JSON.stringify(transactions))
+//     return data;
+//   } catch (error: any) {
+//     throw new Error(`Failed to update account: ${error.message}`);
+//   }
+// };
+
+export const getAllTransactions = async (
+  email: string,
+  page: number = 1,
+  limit: number = 10
+) => {
+  try {
+    const skip = (page - 1) * limit;
+    
+    const data = await Transaction.find({ email: email })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+    
+    const totalCount = await Transaction.countDocuments({ email: email });
+    
+    const totalPages = Math.ceil(totalCount / limit);
+    const transactions = JSON.parse(JSON.stringify(data))
+    return {
+      transactions,
+      currentPage: page,
+      totalPages,
+      totalCount
+    };
+  } catch (error: any) {
+    throw new Error(`Failed to fetch transactions: ${error.message}`);
   }
 };
 
@@ -103,7 +142,9 @@ export const updateTransaction = async (
     // }
 
     console.log("Transaction updated:", updatedTransaction);
-    return updatedTransaction;
+    const data = JSON.parse(JSON.stringify(updatedTransaction))
+
+    return data;
   } catch (error: any) {
     throw new Error(`Failed to update transaction: ${error.message}`);
   }
@@ -121,77 +162,45 @@ export const deleteTransaction = async (transactionId: string) => {
   }
 };
 
-// export interface ITransaction extends Document {
-//     // userId: Schema.Types.ObjectId;
-//     email: string;
-//     accountId: Schema.Types.ObjectId;
-//     amount: number;
-//     category: string;
-//     type: string;
-//     date: Date;
-//     notes: string;
-//     createdAt: Date;
-//     updatedAt: Date;
-// }
+export async function generatePseudoTransactions(email: string) {
+  const currentDate = new Date();
+  const startDate = new Date(currentDate);
+  startDate.setDate(startDate.getDate() - 28);
 
-export async function generatePseudoTransactions(email: String) {
-  // console.log("Inside the generatePseudoTransactions function");
-  const currentDate = new Date(); // Current date
-  const startDate = new Date(currentDate); // Start date for the past 4 weeks
-  startDate.setDate(startDate.getDate() - 28); // Subtract 28 days for 4 weeks
-
-  // Loop through each day for the last 4 weeks
-  for (
-    let date = new Date(startDate);
-    date <= currentDate;
-    date.setDate(date.getDate() + 1)
-  ) {
-    // Generate pseudo transactions for each day
+  for (let date = new Date(startDate); date <= currentDate; date.setDate(date.getDate() + 1)) {
     const pseudoTransactions = generatePseudoTransactionsForDay(date, email);
     console.log(pseudoTransactions);
 
-    // Insert pseudo transactions into the database
     await Transaction.insertMany(pseudoTransactions);
   }
 
-  console.log(
-    "Pseudo transactions generated and added to the database successfully."
-  );
+  console.log("Pseudo transactions generated and added to the database successfully.");
 }
 
-// Function to generate pseudo transactions for a specific day
-function generatePseudoTransactionsForDay(date: Date, email: String) {
-  // Assuming you want to generate random amounts and categories
-  const categories = [
-    "Food",
-    "Transportation",
-    "Utilities",
-    "Shopping",
-    "Entertainment",
-  ];
+function generatePseudoTransactionsForDay(date: Date, email: string) {
+  const categories = ['Food', 'Clothes', 'Entertainment', 'Rent', 'Subscription'];
   const types = ["Expense", "Income"];
-
-  // Generate a random number of transactions for the day (you can adjust this range as needed)
+  const accounts = ['Kotak', 'PNB'];
   const numTransactions = Math.floor(Math.random() * 5) + 1;
 
   const pseudoTransactions = [];
   for (let i = 0; i < numTransactions; i++) {
-    const amount = Math.floor(Math.random() * 1000) + 1; // Random amount between 1 and 1000
-    const category = categories[Math.floor(Math.random() * categories.length)]; // Random category
-    const type = types[Math.floor(Math.random() * types.length)]; // Random type
-    const notes = "Generated pseudo transaction";
-    const createdAt = new Date(date); // Set createdAt to the specific day
+    const amount = parseFloat((Math.random() * 1000).toFixed(2));
+    const category = categories[Math.floor(Math.random() * categories.length)];
+    const type = types[Math.floor(Math.random() * types.length)];
+    const accountName = accounts[Math.floor(Math.random() * accounts.length)];
+    const createdAt = new Date(date);
 
-    // Create pseudo transaction object
     const pseudoTransaction = {
       email,
+      accountName,
       amount,
       category,
       type,
-      date,
-      notes,
+      date: createdAt,
+      notes: "Generated pseudo transaction",
       createdAt,
-      updatedAt: createdAt, // Assuming updatedAt is the same as createdAt initially
+      updatedAt: createdAt,
     };
 
     pseudoTransactions.push(pseudoTransaction);
@@ -199,3 +208,18 @@ function generatePseudoTransactionsForDay(date: Date, email: String) {
 
   return pseudoTransactions;
 }
+
+
+export const getTotalTransactionsperCategory = async (email: string) => {
+  try {
+    const transactions = await Transaction.aggregate([
+      { $match: { email: email } },
+      { $group: { _id: "$category", totalAmount: { $sum: "$amount" } } },
+    ]);
+
+    return transactions;
+    
+  } catch (error: any) {
+    throw new Error(`Failed to get transactions: ${error.message}`);
+  }
+};
